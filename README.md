@@ -7,7 +7,7 @@ For Ubuntu bionic - 18.04
 sudo apt update
 sudo apt upgrade
 sudo apt install git
-sudo apt install python-pip
+sudo apt install python3-pip
 git clone https://github.com/headrun/PartnerHub
 sh PartnerHub/AppInstallation/install.sh 
 ```
