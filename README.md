@@ -1,7 +1,7 @@
 # PartnerHub
 Partnerhub is an live api service which would allow the customer to install the application which will help them to keep track of their drivers and vehicle(driving hours, location etc).
 
-##Setup
+## Setup
 For Ubuntu bionic - 18.04
 ```
 sudo apt update
