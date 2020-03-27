@@ -63,7 +63,7 @@ class MyGeoTab(Spider):
                             "name": self.username,
                             "firstName": self.firstname.title(),
                             "lastName": self.lastname.title(),
-                            "password": self.password.replace('.', '').strip(),
+                            "password": self.password.replace('.', '').strip().lower(),
                             "securityGroups": [{"id": "GroupDriveUserSecurityId"}],
                             "changePassword": False,
                             "designation": "",
