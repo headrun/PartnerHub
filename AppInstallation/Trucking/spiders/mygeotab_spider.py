@@ -138,7 +138,7 @@ class MyGeoTab(Spider):
             else:
                 msg = 'Something went wrong. Please check.'
 
-            item = dumps({"response": error_check, "code":401})
+            item = dumps({"response": error_check, "code": 401, 'message': msg})
 
         write_json(self.json_file, item)
         logger.info("User Name: %s - Password: %s - Status: %s - response: %s", self.username, self.password, code, msg)
