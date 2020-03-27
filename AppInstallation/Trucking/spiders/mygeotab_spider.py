@@ -15,7 +15,8 @@ class MyGeoTab(Spider):
         self.username = kwargs.get('username', '')
         self.firstname = kwargs.get('firstname', '')
         self.lastname = kwargs.get('lastname', '')
-        self.password = "%s%s_partnerhub1".replace('.', '').strip().lower() % (self.firstname, self.lastname)
+        self.password = "%s%s_partnerhub1" % (self.firstname, self.lastname)
+        self.password = self.password.replace('.', '').strip().lower()
         if not self.username or not self.firstname or not self.lastname:
             return "Credentials Missing"
 
