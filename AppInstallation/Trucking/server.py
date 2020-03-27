@@ -71,7 +71,7 @@ def mygeotab():
     call(['scrapy crawl mygeotab_spider -a username=%s -a firstname=%s -a lastname=%s' % (username, firstname, lastname)], shell=True)
     file_pattern = os.path.join(PROCESSING_QUERY_FILES_PATH, 'mygeotab_spider_%s%s.json' % (firstname, lastname))
     try:
-        with open(os.path.join(file_pattern, 'r') as items_file:
+        with open(os.path.join(file_pattern, 'r')) as items_file:
             item = json.loads(items_file.read())
             response.status_code = item.get('code','')
             message = item.get('message','')

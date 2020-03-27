@@ -56,8 +56,7 @@ def write_json(path, item):
     with open(path, "w") as _file:
         _file.write(item)
 
-def move(filename):
-    import pdb;pdb.set_trace()
+def move_to_processed(filename):
     file_path = "{0}/{1}.json".format(PROCESSING_QUERY_FILES_PATH, filename)
     cmd = "mv %s %s" %(file_path, PROCESSED_QUERY_FILES_PATH)
     try:
