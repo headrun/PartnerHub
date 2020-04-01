@@ -9,7 +9,7 @@ get_process_dirs()
 
 class MyGeoTab(Spider):
     name = 'mygeotab_spider'
-    start_urls = ['https://my.geotab.com/']
+    start_urls = []
 
     def __init__(self, *args, **kwargs):
         self.username = kwargs.get('username', '')
@@ -23,7 +23,7 @@ class MyGeoTab(Spider):
         self.four_password = "partnerhub1"
         self.json_file = get_json(self.name, '%s' % self.username)
 
-    def parse(self, response):
+    def start_requests(self):
         logger = get_logger(self.name, '%s' % self.username)
         _dict = {
                 "JSON-RPC": dumps({
