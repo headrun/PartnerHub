@@ -1,6 +1,6 @@
 import os
 import json
-from utils import move_to_processed, PAR_DIR, OUTPUT_DIR,\
+from .utils import move_to_processed, PAR_DIR, OUTPUT_DIR,\
 PROCESSING_QUERY_FILES_PATH, PROCESSED_QUERY_FILES_PATH
 from flask import Flask, request, abort, jsonify
 from flask_restful import Resource, Api
@@ -15,13 +15,13 @@ api = Api(app)
 def check_credentials(username, password):
     response = ''
     if not username or not password:
+        response = jsonify({"response": "Not all the necessary arguments are passed. Please Check!"})
         response.status_code = 400
-        response = jsonify({"response":"Not all the necessary arguments are passed. Please Check!"})
 
     return response
 
 def send_error():
-    response = jsonify({"response":"Resource temporarily unavailable"})
+    response = jsonify({"response": "Resource temporarily unavailable"})
     response.status_code = 500
     return response
 
@@ -56,9 +56,9 @@ def keep_truckin():
             oauth = items.get('auth_code','')
             company_id = items.get('companyID','')
             if oauth == '':
-                response = jsonify({"response":{"message":message}})
+                response = jsonify({"response": {"message":message}})
             else:
-                response = jsonify({"response":{"message":message,"oauth":oauth,"companyID":company_id}})
+                response = jsonify({"response": {"message":message,"oauth":oauth,"companyID":company_id}})
             response.status_code = items.get('code','')
             move_to_processed(file_pattern)
     except:
@@ -69,15 +69,13 @@ def keep_truckin():
 @app.route('/api/v1/mygeotab', methods=['POST'])
 def mygeotab():
     username = request.form.get('username', '')
-    firstname = request.form.get('firstname', '')
-    lastname = request.form.get('lastname', '')
-    if not username or not lastname or not firstname:
-        response = jsonify({"response":"Not all the necessary arguments are passed. Please Check!"})
-        response.status_code = 400
-        return response
+    password = request.form.get('password', '')
+    error_check = check_credentials(username, password)
+    if error_check:
+        return error_check
 
-    call(['scrapy crawl mygeotab_spider -a username=%s -a firstname=%s -a lastname=%s' % (username, firstname, lastname)], shell=True)
-    file_pattern = os.path.join(PROCESSING_QUERY_FILES_PATH, 'mygeotab_spider_%s%s.json' % (firstname, lastname))
+    call(['scrapy crawl mygeotab_spider -a username=%s -a password=%s' % (username, password)], shell=True)
+    file_pattern = os.path.join(PROCESSING_QUERY_FILES_PATH, 'mygeotab_spider_%s.json' % (username))
     try:
         with open(file_pattern, 'r') as items_file:
             item = json.loads(items_file.read())
@@ -87,9 +85,9 @@ def mygeotab():
             providercode = item.get('providercode','')
 
             if not reg_username or not reg_password or not providercode:
-                response = jsonify({"response":{"message": message}})
+                response = jsonify({"response": {"message": message}})
             else:
-                response = jsonify({"response":{"message": message, "username": reg_username,
+                response = jsonify({"response": {"message": message, "username": reg_username,
                                     "password": reg_password, "providercode": providercode}})
 
             response.status_code = item.get('code','')

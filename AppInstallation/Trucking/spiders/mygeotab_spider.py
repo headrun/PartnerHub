@@ -13,26 +13,25 @@ class MyGeoTab(Spider):
 
     def __init__(self, *args, **kwargs):
         self.username = kwargs.get('username', '')
-        self.firstname = kwargs.get('firstname', '')
-        self.lastname = kwargs.get('lastname', '')
-        self.password = "%s%s_partnerhub1" % (self.firstname, self.lastname)
-        self.password = self.password.replace('.', '').strip().lower()
-        if not self.username or not self.firstname or not self.lastname:
+        self.password = kwargs.get('password', '')
+        if not self.username and not self.password:
             return "Credentials Missing"
 
-        self.login_username = "greg.pruitt@fourkites.com"
-        self.login_password = "KitesFlyHigh1"
-        self.json_file = get_json(self.name, '%s%s' % (self.firstname, self.lastname))
+        self.four_username = "geotab@fourkites.com"
+        self.four_firstname = "Four"
+        self.four_lastname = "Kites"
+        self.four_password = "partnerhub1"
+        self.json_file = get_json(self.name, '%s' % self.username)
 
     def parse(self, response):
-        logger = get_logger(self.name, '%s%s' % (self.firstname, self.lastname))
+        logger = get_logger(self.name, '%s' % self.username)
         _dict = {
                 "JSON-RPC": dumps({
                     "method": "Authenticate",
                     "params": {
                         "database": "",
-                        "userName": self.login_username,
-                        "password": self.login_password
+                        "userName": self.username,
+                        "password": self.password
                         }
                     })
                 }
@@ -61,10 +60,10 @@ class MyGeoTab(Spider):
                         "typeName": "User",
                         "entity": {
                             "userAuthenticationType": "BasicAuthentication",
-                            "name": self.username,
-                            "firstName": self.firstname.title(),
-                            "lastName": self.lastname.title(),
-                            "password": self.password,
+                            "name": self.four_username,
+                            "firstName": self.four_firstname.title(),
+                            "lastName": self.four_lastname.title(),
+                            "password": self.four_password,
                             "securityGroups": [{"id": "GroupDriveUserSecurityId"}],
                             "changePassword": False,
                             "designation": "",
@@ -99,12 +98,12 @@ class MyGeoTab(Spider):
                             "activeTo": "2050-01-01T00:00:00.000Z",
                             "companyGroups": [{"id": "GroupCompanyId"}],
                             "reportGroups": [],
-                            "WindowsAuthenticationUserId": self.username
+                            "WindowsAuthenticationUserId": self.four_username
                             },
                         "credentials": {
                             "database": database,
                             "sessionId": session_id,
-                            "userName": self.login_username
+                            "userName": self.username
                             }
                         }
                     })
@@ -125,8 +124,8 @@ class MyGeoTab(Spider):
             code = 200
             msg = 'User added successfully.'
             item = dumps({
-                    'username': self.username,
-                    'password': self.password,
+                    'username': self.four_username,
+                    'password': self.four_password,
                     'providercode': database,
                     'code': 200,
                     'message': msg
