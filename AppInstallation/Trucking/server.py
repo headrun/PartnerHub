@@ -1,6 +1,6 @@
 import os
 import json
-from .utils import move_to_processed, PAR_DIR, OUTPUT_DIR,\
+from utils import move_to_processed, PAR_DIR, OUTPUT_DIR,\
 PROCESSING_QUERY_FILES_PATH, PROCESSED_QUERY_FILES_PATH
 from flask import Flask, request, abort, jsonify
 from flask_restful import Resource, Api
