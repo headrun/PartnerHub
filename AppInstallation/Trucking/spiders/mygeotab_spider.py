@@ -36,7 +36,7 @@ class MyGeoTab(Spider):
                     })
                 }
         url = 'https://my664.geotab.com/apiv1'
-        return FormRequest(url, callback=self.parse_login, formdata=_dict, meta={'logger': logger})
+        yield FormRequest(url, callback=self.parse_login, formdata=_dict, meta={'logger': logger})
 
     def parse_login(self, response):
         logger = response.meta.get('logger', '')
