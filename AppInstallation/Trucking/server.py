@@ -38,6 +38,7 @@ def after_request(response):
 def home():
     abort(404)
 
+@app.route('/api/v1/keeptruckin', methods=['POST'])
 @app.route('/api/v1/install', methods=['POST'])
 def keep_truckin():
     username = request.form.get('username', '')
