@@ -107,4 +107,29 @@ def zonar():
     response = check_credentials(username, password)
     if response:
         return response
-    call(['scrapy crawl install_app -a username=%s -a password=%s' % (username, password)], shell=True)
+
+    call(['scrapy crawl zonar_selinum --set ROBOTSTXT_OBEY=0 -a username=%s -a password=%s' % (username, password)], shell=True)
+    file_pattern = os.path.join(PROCESSING_QUERY_FILES_PATH, 'zonar_selinum_%s.json' % (username))
+    try:
+        with open(file_pattern, 'r') as items_file:
+            item = json.loads(items_file.read())
+            message = item.get('message','')
+            reg_username = item.get('username','')
+            reg_password = item.get('password', '')
+            providercode = item.get('providercode','')
+
+            if not reg_username or not reg_password or not providercode:
+                response = jsonify({"response": {"message": message}})
+            else:
+                response = jsonify({"response": {"message": message, "username": reg_username,
+                                    "password": reg_password, "providercode": providercode}})
+
+            response.status_code = item.get('code','')
+
+        move_to_processed(file_pattern)
+
+    except:
+        response = send_error()
+
+    return response
+
