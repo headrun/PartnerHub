@@ -78,7 +78,7 @@ class ZonarSelenium(Spider):
         sel = Selector(response)
         logger = response.meta['logger']
         status_message = ''.join(sel.xpath('//message/text()').extract())
-        if not 'another user' in status_message:
+        if 'another user' in status_message:
             code = 401
             msg = 'Username already registered.'
             item = dumps({"response": status_message, "code": 401, 'message': msg})
