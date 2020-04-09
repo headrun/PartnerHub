@@ -24,11 +24,11 @@ class ZonarSelenium(Spider):
         self.four_password = "partnerhub"
         self.four_uname = "FourKites_partnerhub"
 
-        self.display = Display(visible=1, size=(1400, 1000))
+        self.display = Display(visible=0, size=(1400, 1000))
         self.display.start()
         options = webdriver.ChromeOptions()
         options.add_argument('--no-sandbox')
-        #options.add_argument('--headless')
+        options.add_argument('--headless')
         self.driver = webdriver.Chrome(chrome_options=options)
         self.json_file = get_json(self.name, '%s' % self.username)
 
