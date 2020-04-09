@@ -67,7 +67,7 @@ class ZonarSelenium(Spider):
 
         if not username or not customer:
             logger.info("User Name: %s - Password: %s - Status: 500 - response: %s", self.username, self.password, "Server Error")
-            item = dumps({"response": "Internal Server Error", "code": 500})
+            item = dumps({"response": "Internal Server Error", "code": 500, "message": "Internal Server Error"})
             write_json(self.json_file, item)
             return
 
@@ -78,18 +78,20 @@ class ZonarSelenium(Spider):
         sel = Selector(response)
         logger = response.meta['logger']
         status_message = ''.join(sel.xpath('//message/text()').extract())
-        if 'another user' in status_message:
+        if not 'another user' in status_message:
             code = 401
             msg = 'Username already registered.'
             item = dumps({"response": status_message, "code": 401, 'message': msg})
 
         else:
+            code = 200
+            msg = 'User added successfully.'
             item = dumps({
                 'username': self.four_uname,
                 'password': self.four_password,
                 'providercode': response.meta['customer'],
-                'code': 200,
-                'message': 'User added successfully.'
+                'code': code,
+                'message': msg
                 })
 
         write_json(self.json_file, item)
